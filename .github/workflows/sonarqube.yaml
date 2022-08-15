@@ -1,0 +1,34 @@
+---
+
+name: Upload Files for SonarQube Analysis
+on:
+  workflow_call:
+    inputs:
+      upload-name:
+        description: |
+          Name of file upload given by previous
+          actions/upload-artifact step
+        required: false
+        type: string
+        default: coverage-report
+    secrets:
+      sonarqube-token:
+        required: true
+      sonarqube-host-url:
+        required: true
+jobs:
+  sonarqube:
+    name: SonarQube Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Download test coverage report
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ inputs.upload-name }}
+      - uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.sonarqube-token }}
+          SONAR_HOST_URL: ${{ secrets.sonarqube-host-url }}
