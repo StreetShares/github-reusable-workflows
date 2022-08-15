@@ -10,22 +10,31 @@ on:
     outputs:
       tag:
         description: "Artifact tag of current github action run"
-        value: "${{ jobs.tag.outputs.output2 }}"
+        value: "${{ jobs.tag.outputs.tag }}"
+      branch:
+        description: "Breanch of current github action run"
+        value: "${{ jobs.tag.outputs.branch }}"
 
 jobs:
   tag:
     name: Generate artifact tag
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+      branch: ${{ steps.tag.outputs.branch }}
     steps:
       - uses: actions/checkout@v3
         with:
           repository: streetshares/kubernetes
           token: ${{ secrets.BUILD_TAGGING_TOKEN }}
           ref: master
+      - uses: FranzDiebold/github-env-vars-action@v2.3.0
       - uses: fregante/setup-git-user@v1
       - name: Create manifest file
         run: ./scripts/create_manifest_file.sh
       - name: Set output for artifact tag
+        id: tag
         run: |
           export ARTIFACT_TAG="$(jq -r '.artifact_version' manifest.json)"
           echo "::set-output name=tag::${ARTIFACT_TAG}"
+          echo "::set-output name=branch::${CI_ACTION_REF_NAME}"
