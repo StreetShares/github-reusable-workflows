@@ -2,6 +2,28 @@
 
 Collection of reusable GitHub Action workflows.
 
+## Generate Artifact Tag
+
+Generates StreetShares artifact tag.
+
+### Usage
+
+```yaml
+tag:
+  uses: streetshares/github-reusable-workflows/.github/workflows/artifact-tag.yaml@main
+  secrets: inherit
+job:
+  needs: tag
+  steps:
+    - run: echo ${{needs.tag.outputs.tag}}
+
+```
+
+| Attribute           | Type   | Required | Default |
+| ------------------- | ------ | -------- | ------- |
+| BUILD_TAGGING_TOKEN | secret | true     |         |
+| tag                 | output |          |         |
+
 ## SonarQube Upload
 
 Uploads previously uploaded files with `actions/upload-artifact` github action.
@@ -17,8 +39,8 @@ jobs:
     secrets: inherit
 ```
 
-| Input              | Type   | Required | Default         |
-| ------------------ | ------ | -------- | --------------- |
-| upload-name        | with   | false    | coverage-report |
-| sonarqube-token    | secret | true     |                 |
-| sonarqube-host-url | secret | true     |                 |
+| Attribute      | Type   | Required | Default         |
+| -------------- | ------ | -------- | --------------- |
+| upload-name    | input  | false    | coverage-report |
+| SONAR_TOKEN    | secret | true     |                 |
+| SONAR_HOST_URL | secret | true     |                 |

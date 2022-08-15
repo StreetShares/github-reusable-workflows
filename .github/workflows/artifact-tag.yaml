@@ -28,5 +28,4 @@ jobs:
       - name: Set output for artifact tag
         run: |
           export ARTIFACT_TAG="$(jq -r '.artifact_version' manifest.json)"
-          echo "ARTIFACT_TAG=$ARTIFACT_TAG"
           echo "::set-output name=tag::${ARTIFACT_TAG}"
