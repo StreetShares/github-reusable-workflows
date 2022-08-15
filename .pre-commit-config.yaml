@@ -1,0 +1,86 @@
+---
+repos:
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.10.1
+    hooks:
+      - id: isort
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.3.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-json
+      - id: check-yaml
+        # helm templates ain't yaml so exclude any
+        # dir named templates beneath the helm dir.
+        # we'll lint them with helm itself instead.
+        exclude: |
+          (?x)(
+            helm/([^/]+/)*templates/|
+            (helmfile.(ya?ml))|
+            aws-load-balancer-controller|
+            github_utils/github_actions_sync/helm_files/
+          )
+        args:
+          - --allow-multiple-documents
+  - repo: https://github.com/jas-on/pre-commit-hadolint.git
+    rev: 1.0.1
+    hooks:
+      - id: hadolint
+        # DL3007 throws and error when the FROM instruction tag is latest.
+        # The images we produce should be set to latest.
+        args: [--ignore, DL3007]
+  - repo: https://github.com/gruntwork-io/pre-commit
+    rev: v0.1.17
+    hooks:
+      - id: markdown-link-check
+      - id: helmlint
+        # look for helm templates in any directory named
+        # templates that is a subdir of helm and lint them
+        files: helm/([^/]+/)*templates/.*?\.((ya?ml)|(tpl))$
+      - id: terraform-fmt
+        files: \.tf$
+        exclude: \.+.terraform\/.*$
+  - repo: https://github.com/psf/black
+    rev: 22.6.0
+    hooks:
+      - id: black
+        language_version: python3
+  - repo: https://github.com/PyCQA/pylint.git
+    rev: v2.14.5
+    hooks:
+      - id: pylint
+        exclude: ^migrations
+        args: [--py-version, "3.10"]
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.3.0
+    hooks:
+      - id: detect-secrets
+        exclude: |
+          ^(
+            tests/|
+            migrations/versions/|
+            poetry.lock|
+            scenario_tests/transunion_certificates/
+          )
+        args: ["--baseline", ".secrets.baseline"]
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.4
+    hooks:
+      - id: bandit
+        alias: bandit
+        exclude: ^(tests/|migrations/|scenario_tests/)
+        args: [--recursive, member]
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v0.931
+    hooks:
+      - id: mypy
+        alias: mypy
+        verbose: true
+        entry: bash -c 'mypy "$@" || true' --
+        exclude: ^(tests/|migrations/)
+        args: [--strict, --ignore-missing-imports]
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.27.1
+    hooks:
+      - id: yamllint
