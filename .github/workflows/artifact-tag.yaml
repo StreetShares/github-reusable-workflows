@@ -12,7 +12,7 @@ on:
         description: "Artifact tag of current github action run"
         value: "${{ jobs.tag.outputs.tag }}"
       branch:
-        description: "Breanch of current github action run"
+        description: "Branch of current github action run"
         value: "${{ jobs.tag.outputs.branch }}"
 
 jobs:

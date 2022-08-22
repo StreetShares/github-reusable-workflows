@@ -19,10 +19,10 @@ job:
 
 ```
 
-| Attribute           | Type   | Required | Default |
-| ------------------- | ------ | -------- | ------- |
-| BUILD_TAGGING_TOKEN | secret | true     |         |
-| tag                 | output |          |         |
+| Attribute           | Type   | Required |
+| ------------------- | ------ | -------- |
+| BUILD_TAGGING_TOKEN | secret | true     |
+| tag                 | output |          |
 
 ## SonarQube Upload
 
@@ -44,3 +44,17 @@ jobs:
 | upload-name    | input  | false    | coverage-report |
 | SONAR_TOKEN    | secret | true     |                 |
 | SONAR_HOST_URL | secret | true     |                 |
+
+## Tag Pusher
+
+Push a tag to the git repo.  This is usually used at the end of a successful build.
+
+```yaml
+  push-tag:
+    uses: streetshares/github-reusable-workflows/.github/workflows/push-tag.yaml@main
+    secrets: inherit
+```
+
+| Attribute           | Type   | Required |
+| ------------------- | ------ | -------- |
+| BUILD_TAGGING_TOKEN | secret | true     |

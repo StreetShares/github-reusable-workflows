@@ -1,0 +1,34 @@
+---
+
+name: Push given tag to git repository
+on:
+  workflow_call:
+    secrets:
+      BUILD_TAGGING_TOKEN:
+        required: true
+
+jobs:
+  push-tag:
+    runs-on: ubuntu-latest
+    steps:
+      # make sure we are not using the generated branch name from a pull request event.
+      - uses: actions/checkout@v2
+        if: github.event_name == 'pull_request'
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+      # This step is only on a push event.  This could also be a build of the
+      # trunk branch after a merged pull request.
+      - uses: actions/checkout@v2
+        if: github.event_name == 'push'
+        with:
+          fetch-depth: 0
+      - uses: actions/checkout@v3
+        with:
+          repository: streetshares/kubernetes
+          path: kubernetes
+          token: ${{ secrets.BUILD_TAGGING_TOKEN }}
+          ref: master
+      - uses: fregante/setup-git-user@v1
+      - run: ./kubernetes/scripts/push_build_tag.sh
+
