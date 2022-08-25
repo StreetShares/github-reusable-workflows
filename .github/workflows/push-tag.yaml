@@ -11,15 +11,16 @@ jobs:
   push-tag:
     runs-on: ubuntu-latest
     steps:
-      # make sure we are not using the generated branch name from a pull request event.
-      - uses: actions/checkout@v2
+      # make sure we are not using the generated branch name
+      # from a pull request event.
+      - uses: actions/checkout@v3
         if: github.event_name == 'pull_request'
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
       # This step is only on a push event.  This could also be a build of the
       # trunk branch after a merged pull request.
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         if: github.event_name == 'push'
         with:
           fetch-depth: 0
@@ -31,4 +32,3 @@ jobs:
           ref: master
       - uses: fregante/setup-git-user@v1
       - run: ./kubernetes/scripts/push_build_tag.sh
-
