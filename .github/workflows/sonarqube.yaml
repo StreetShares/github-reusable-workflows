@@ -11,6 +11,10 @@ on:
         required: false
         type: string
         default: coverage-report
+      args:
+        description: Extra args for SonarQube.
+        required: false
+        type: string
     secrets:
       SONAR_TOKEN:
         required: true
@@ -32,3 +36,5 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          args: ${{ inputs.args }}

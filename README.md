@@ -42,6 +42,7 @@ jobs:
 | Attribute      | Type   | Required | Default         |
 | -------------- | ------ | -------- | --------------- |
 | upload-name    | input  | false    | coverage-report |
+| args           | input  | false    |                 |
 | SONAR_TOKEN    | secret | true     |                 |
 | SONAR_HOST_URL | secret | true     |                 |
 
