@@ -11,6 +11,11 @@ on:
         required: false
         type: string
         default: coverage-report
+      artifact-path:
+        description: |
+          Path where the artifact should be downloaded
+        required: false
+        type: string
       args:
         description: Extra args for SonarQube.
         required: false
@@ -32,6 +37,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ${{ inputs.upload-name }}
+          path: ${{ inputs.artifact-path }}
       - uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
