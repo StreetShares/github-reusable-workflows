@@ -42,7 +42,7 @@ jobs:
           path: kubernetes
           token: ${{ secrets.BUILD_TAGGING_TOKEN }}
           ref: master
-      - uses: FranzDiebold/github-env-vars-action@v2.3.0
+      - uses: FranzDiebold/github-env-vars-action@v2.7.0
       - uses: fregante/setup-git-user@v1
       - name: Create manifest file
         run: ./kubernetes/scripts/create_manifest_file.sh
