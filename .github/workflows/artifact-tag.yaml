@@ -45,10 +45,10 @@ jobs:
       - uses: FranzDiebold/github-env-vars-action@v2.7.0
       - uses: fregante/setup-git-user@v1
       - name: Create manifest file
-        run: ./kubernetes/scripts/create_manifest_file.sh
+        run: VERBOSE=1 ./kubernetes/scripts/create_manifest_file.sh
       - name: Set output for artifact tag
         id: tag
         run: |
           export ARTIFACT_TAG="$(jq -r '.artifact_version' manifest.json)"
-          echo "::set-output name=tag::${ARTIFACT_TAG}"
-          echo "::set-output name=branch::${CI_ACTION_REF_NAME}"
+          echo "tag=${ARTIFACT_TAG}" >> $GITHUB_OUTPUT
+          echo "branch=${CI_ACTION_REF_NAME}" >> $GITHUB_OUTPUT
