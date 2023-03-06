@@ -43,7 +43,7 @@ jobs:
           token: ${{ secrets.BUILD_TAGGING_TOKEN }}
           ref: master
       - uses: FranzDiebold/github-env-vars-action@v2.7.0
-      - uses: fregante/setup-git-user@v1
+      - uses: fregante/setup-git-user@v2
       - name: Create manifest file
         run: VERBOSE=1 ./kubernetes/scripts/create_manifest_file.sh
       - name: Set output for artifact tag
